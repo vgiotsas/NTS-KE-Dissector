@@ -1,0 +1,12 @@
+[Unit]
+Description=Small Network Time Security Client (NTP with NTS)
+Conflicts=systemd-timesyncd.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/ntsclient --config /etc/ntsclient.toml
+DynamicUser=yes
+AmbientCapabilities=CAP_SYS_TIME
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,7 @@
+linters:
+  enable-all: true
+  disable:
+    - funlen
+    - gocognit
+    - wsl
+    - gomnd

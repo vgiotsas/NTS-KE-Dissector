@@ -1,0 +1,67 @@
+image: golang:buster
+
+stages:
+  - build
+
+before_script:
+  - apt-get update
+  - mkdir -p $HOME/rpmbuild/{SPECS,SOURCES}
+  - cp contrib/ntsclient.spec $HOME/rpmbuild/SPECS/
+  - mkdir artifacts
+
+build_rpm_branch:
+  variables:
+    PACKAGE_VERSION: "$CI_COMMIT_REF_NAME"
+
+  stage: build
+
+  # These files will be available for download later from Gitlab webgui
+  artifacts:
+    paths:
+      - artifacts/ntsclient*.rpm
+
+  script:
+    - export PACKAGE_VERSION="${PACKAGE_VERSION//-/_}"
+    - apt-get -y --no-install-recommends install rpm libsystemd-dev selinux-policy-dev
+    - cp contrib/ntsclient.spec $HOME/rpmbuild/SPECS/
+    - git archive --format=tar.gz --prefix="ntsclient-${PACKAGE_VERSION}/" -o "$HOME/rpmbuild/SOURCES/ntsclient-${PACKAGE_VERSION}.tar.gz" HEAD
+
+    - rpmbuild -ba 
+      --define '_unitdir /usr/lib/systemd/system'
+      --define "upstream_version $PACKAGE_VERSION"
+      $HOME/rpmbuild/SPECS/ntsclient.spec
+
+    - cp -v $HOME/rpmbuild/SRPMS/ntsclient-*.rpm artifacts/
+    - cp -v $HOME/rpmbuild/RPMS/*/ntsclient-*.rpm artifacts/
+
+  # Only run for these branches
+  only:
+    - branches
+
+build_rpm_tag:
+  variables:
+    PACKAGE_VERSION: "$CI_BUILD_TAG"
+
+  stage: build
+
+  # These files will be available for download later from Gitlab webgui
+  artifacts:
+    paths:
+      - artifacts/ntsclient*.rpm
+
+  script:
+    - export PACKAGE_VERSION="${PACKAGE_VERSION//-/_}"
+    - apt-get -y --no-install-recommends install rpm libsystemd-dev selinux-policy-dev
+    - git archive --format=tar.gz --prefix="ntsclient-${PACKAGE_VERSION}/" -o "$HOME/rpmbuild/SOURCES/ntsclient-${PACKAGE_VERSION}.tar.gz" HEAD
+
+    - rpmbuild -ba 
+      --define '_unitdir /usr/lib/systemd/system'
+      --define "upstream_version $PACKAGE_VERSION"
+      $HOME/rpmbuild/SPECS/ntsclient.spec
+
+    - cp -v $HOME/rpmbuild/SRPMS/ntsclient-*.rpm artifacts/
+    - cp -v $HOME/rpmbuild/RPMS/*/ntsclient-*.rpm artifacts/
+
+  # Only run for these branches
+  only:
+    - tags

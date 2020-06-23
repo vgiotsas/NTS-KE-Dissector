@@ -1,0 +1,20 @@
+# Ask this server on this port about time
+
+# There are a few NTS-supporting servers running out there. In various states
+# of production, pilots, experimental test, etc. This is no complete list.
+
+# https://netnod.se
+server="127.0.0.1:4430"
+
+# https://www.cloudflare.com/time/
+# server="time.cloudflare.com:1234"
+
+# https://nts.time.nl/
+#server="nts.time.nl:123"
+
+# Trust *only* this Certificate Authority certificate (PEM) to sign certficates
+# for server above.
+# cacert="../ntskeserver/cert.pem"
+
+# Interval in seconds between queries
+interval=1000
