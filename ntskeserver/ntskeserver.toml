@@ -1,0 +1,10 @@
+# Listen to this address and port for NTS-KE clients
+listen = "127.0.0.1:4430"
+
+# Use this X.509 certificate and private key
+certfile = "cert.pem"
+privatefile = "key.pem"
+
+# Use this secret to encrypt the cookies
+cookiekeyid = 17
+cookiesecret = "12345678901234567890123456789012"
