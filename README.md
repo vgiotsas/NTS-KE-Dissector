@@ -1,3 +1,4 @@
+
 # NTS-KE Wireshark Dissector
 
 The `ntpke-dissector.lua` is a Wireshark dissector written in Lua to parse NTS-KE (Network Time Security Key Establishment) messages that conform to the [IETF Draft Version 28](https://tools.ietf.org/html/draft-ietf-ntp-using-nts-for-ntp-28#section-4). 
@@ -87,9 +88,15 @@ between offering advanced features and quick development. So I decided to develo
 Since I've never worked before with Lua, I started with a relatively simple [tutorial](https://mika-s.github.io/wireshark/lua/dissector/2017/11/04/creating-a-wireshark-dissector-in-lua-1.html) on implementing a Lua dissector for the MongoDB wire protocol to get familiar with the language syntax and the Wireshark API.
 
 I then spent some time studying the official [Lua examples](https://wiki.wireshark.org/Lua/Examples#A_dissector_tutorial_script) and especially the [DNS dissectory](https://wiki.wireshark.org/Lua/Examples?action=AttachFile&do=get&target=dissector.lua).
+I also found very useful Wireshark’s Lua API Reference Manual, especially section [11.6: Functions For New Protocols And Dissectors](https://www.wireshark.org/docs/wsdg_html_chunked/lua_module_Proto.html). 
 
-I found very useful Wireshark’s Lua API Reference Manual, especially section [11.6: Functions For New Protocols And Dissectors](https://www.wireshark.org/docs/wsdg_html_chunked/lua_module_Proto.html) 
+Unfortunately, after I finished developing the dissector [I realized](https://ask.wireshark.org/question/17368/can-i-submit-a-lua-dissector-to-code-review/) only C/C++ dissectors can be submitted for code review and be accepted to the codebase. So in retrospect, while it's fast to develop in Lua, developing a C/C++ dissector would be more meaningful in terms of contributing back to the project.
 
+### TODOs
+
+* Improve error handling: Some potential errors in the protocol messages are currently unchecked. For instance, client must not send "New Cookie for NTPv4" messages.
+* Port the Lua dissector to C++
+* Produce more test cases
 
 ## Author
 
